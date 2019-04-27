@@ -25,7 +25,7 @@ jobs:
           command: echo $KUBERNETES_CONFIG | base64 --decode >> config
 
       - run:
-          name: do it a list
+          name: do it a lisst
           command: cat config
 
       - run:
