@@ -13,6 +13,7 @@ const create = async (event, context, callback) => {
   // name
   // image
   // port 
+  console.log(event.body)
   const body = JSON.parse(event.body);
 
   const deployment = deployements.post({ body: { "apiVersion": "apps/v1", "kind": "Deployment", "metadata": { "name": `${name}-deployment`, "labels": { "app": name } }, "spec": { "replicas": 1, "selector": { "matchLabels": { "app": body.name } }, "template": { "metadata": { "labels": { "app": body.name } }, "spec": { "containers": [{ "name": body.name, "image": body.image, "ports": [{ "containerPort": body.port }] }] } } } } })
