@@ -20,8 +20,7 @@ const create = async (event, context, callback) => {
   const ingress = ingresses.post({ body: { "apiVersion": "extensions/v1beta1", "kind": "Ingress", "metadata": { "name": `${body.name}-ingress`, "namespace": "default", "annotations": { "kubernetes.io/ingress.class": "traefik" } }, "spec": { "rules": [{ "host": `${body.name}.samuelstenton.com`, "http": { "paths": [{ "backend": { "serviceName": `${body.name}-service`, "servicePort": parseInt(body.port) } }] } }] } } });
 
   const res = await Promise.all([deployment, service, ingress]).catch(err => console.log(err))
-  console.log(res);
-  return success(callback);
+  return success(callback, res);
 }
 const update = (event) => success()
 const destroy = (event) => success()
