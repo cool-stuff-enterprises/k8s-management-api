@@ -12,12 +12,10 @@ const ingresses = client.apis.extensions.v1beta1.namespaces('default').ingresses
 const create = (event) => success()
 const update = (event) => success()
 const destroy = (event) => success()
-const list = (event, context, callback) => {
-  ingresses.get().then(res => {
-    console.log(res);
-  })
-
-  return success(callback);
+const list = async (event, context, callback) => {
+  const { body } = await ingresses.get()
+  
+  return success(callback, body.items);
 }
 
 /**
@@ -27,7 +25,7 @@ const list = (event, context, callback) => {
 const success = (callback, message = 'Success') => (callback(null, {
   statusCode: 200,
     body: JSON.stringify({
-      message: message
+      data: message
     }),
   }));
 
