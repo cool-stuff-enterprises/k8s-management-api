@@ -26,7 +26,7 @@ jobs:
 
       - run:
           name: do it a list
-          command: ls
+          command: cat config
 
       - run:
           name: Deploy application
