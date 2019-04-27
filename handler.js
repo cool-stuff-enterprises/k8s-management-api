@@ -2,7 +2,7 @@ const K8sConfig = require('kubernetes-client').config
 const Client = require('kubernetes-client').Client
 
 // This should be inserted via CI
-const config = K8sConfig.fromKubeconfig('.config');
+const config = K8sConfig.fromKubeconfig('./config');
 
 const client = new Client({ config, version: '1.9' })
 

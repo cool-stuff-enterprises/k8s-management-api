@@ -25,10 +25,6 @@ jobs:
           command: echo $KUBERNETES_CONFIG | base64 --decode >> config
 
       - run:
-          name: do it a lisst
-          command: cat config
-
-      - run:
           name: Deploy application
           command: sls deploy
 
