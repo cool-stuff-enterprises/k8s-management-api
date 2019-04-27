@@ -16,7 +16,7 @@ const create = async (event, context, callback) => {
   const body = JSON.parse(event.body);
 
   const deployment = deployements.post({ body: { "apiVersion": "apps/v1", "kind": "Deployment", "metadata": { "name": `${body.name}-deployment`, "labels": { "app": body.name } }, "spec": { "replicas": 1, "selector": { "matchLabels": { "app": body.name } }, "template": { "metadata": { "labels": { "app": body.name } }, "spec": { "containers": [{ "name": body.name, "image": body.image, "ports": [{ "containerPort": parseInt(body.port) }] }] } } } } })
-  const service = services.post({ body: { "apiVersion": "v1", "kind": "Service", "metadata": { "name": `${body.name}-service`, "namespace": "default" }, "spec": { "selector": { "app": body.name }, "type": "ClusterIP", "ports": [{ "protocol": "TCP", "port": body.port }] } } })
+  const service = services.post({ body: { "apiVersion": "v1", "kind": "Service", "metadata": { "name": `${body.name}-service`, "namespace": "default" }, "spec": { "selector": { "app": body.name }, "type": "ClusterIP", "ports": [{ "protocol": "TCP", "port": parseInt(body.port) }] } } })
   const ingress = ingresses.post({ body: { "apiVersion": "extensions/v1beta1", "kind": "Ingress", "metadata": { "name": `${body.name}-ingress`, "namespace": "default", "annotations": { "kubernetes.io/ingress.class": "traefik" } }, "spec": { "rules": [{ "host": `${body.name}.samuelstenton.com`, "http": { "paths": [{ "backend": { "serviceName": `${body.name}-service`, "servicePort": parseInt(body.port) } }] } }] } } });
 
   const res = await Promise.all([deployment, service, ingress]).catch(err => console.log(err))
