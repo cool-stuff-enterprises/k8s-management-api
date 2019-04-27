@@ -1,0 +1,33 @@
+service: k8s-management 
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: dev
+  region: eu-west-1
+
+functions:
+  create:
+    handler: handler.create
+    events:
+    - http:
+        path: /create
+        method: post
+  destroy:
+    handler: handler.destroy
+    events:
+    - http:
+        path: /destroy
+        method: post
+  update:
+    handler: handler.update
+    events:
+    - http:
+        path: /update
+        method: put
+  list:
+    handler: handler.list
+    events:
+    - http:
+        path: /list
+        method: get
