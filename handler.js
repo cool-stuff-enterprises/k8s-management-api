@@ -35,7 +35,7 @@ const create = async (event, context, callback) => {
         ]
   }
   const services = body.services.map(service => {
-    const selected = availableServices.filter(s.id !== service).pop();
+    const selected = availableServices.filter(s => s.id !== service).pop();
     return {
       "name": `${body.name}-service-${selected.id}`,
       "image": selected.image,
