@@ -34,7 +34,7 @@ const create = async (event, context, callback) => {
           }
         ]
   }
-  const services = body.services.map(service => {
+  const linkedSerivces = body.services.map(service => {
     const selected = availableServices.filter(s => s.id == service).pop();
     return {
       "name": `${body.name}-service-${selected.id}`,
@@ -53,7 +53,7 @@ const create = async (event, context, callback) => {
     ...services.map(service => ({ "protocol": "TCP", "name": service.name, "port": parseInt(service.ports.pop().containerPort)}))
   ];
 
-  const deployment = deployements.post({ body: { "apiVersion": "apps/v1", "kind": "Deployment", "metadata": { "name": `${body.name}-deployment`, "labels": { "app": body.name } }, "spec": { "replicas": 1, "selector": { "matchLabels": { "app": body.name } }, "template": { "metadata": { "labels": { "app": body.name } }, "spec": { "containers": [frontend, ...services] } } } } })
+  const deployment = deployements.post({ body: { "apiVersion": "apps/v1", "kind": "Deployment", "metadata": { "name": `${body.name}-deployment`, "labels": { "app": body.name } }, "spec": { "replicas": 1, "selector": { "matchLabels": { "app": body.name } }, "template": { "metadata": { "labels": { "app": body.name } }, "spec": { "containers": [frontend, ...linkedSerivces] } } } } })
   const service = services.post({ body: { "apiVersion": "v1", "kind": "Service", "metadata": { "name": `${body.name}-service`, "namespace": "default" }, "spec": { "selector": { "app": body.name }, "type": "ClusterIP", "ports": servicePorts } } })
   const ingress = ingresses.post({ body: { "apiVersion": "extensions/v1beta1", "kind": "Ingress", "metadata": { "name": `${body.name}-ingress`, "namespace": "default", "annotations": { "kubernetes.io/ingress.class": "traefik" } }, "spec": { "rules": [{ "host": `${body.name}.samuelstenton.com`, "http": { "paths": [{ "backend": { "serviceName": `${body.name}-service`, "servicePort": "web" } }] } }] } } });
 
