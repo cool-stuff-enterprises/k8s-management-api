@@ -50,7 +50,7 @@ const create = async (event, context, callback) => {
 
   const servicePorts = [
     { "protocol": "TCP", "name": 'web', "port": parseInt(body.port) },
-    ...services.map(service => ({ "protocol": "TCP", "name": service.name, "port": parseInt(serivce.ports.pop().containerPort)}))
+    ...services.map(service => ({ "protocol": "TCP", "name": service.name, "port": parseInt(service.ports.pop().containerPort)}))
   ];
 
   const deployment = deployements.post({ body: { "apiVersion": "apps/v1", "kind": "Deployment", "metadata": { "name": `${body.name}-deployment`, "labels": { "app": body.name } }, "spec": { "replicas": 1, "selector": { "matchLabels": { "app": body.name } }, "template": { "metadata": { "labels": { "app": body.name } }, "spec": { "containers": [frontend, ...services] } } } } })
